@@ -19,6 +19,33 @@ export default function createRoutes() {
        },
      },
      {
+      path: '/SignUp',
+      name: 'signUp',
+      getComponent(nextState, comMod) {
+        import('containers/SignUp')
+          .then(loadModule(comMod))
+          .catch(errorLoading);
+      },
+    },
+    {
+     path: '/SignIn',
+     name: 'signIn',
+     getComponent(nextState, comMod) {
+       import('containers/SignIn')
+         .then(loadModule(comMod))
+         .catch(errorLoading);
+     },
+   },
+   {
+   path: '/Menu',
+   name: 'menu',
+   getComponent(nextState, comMod) {
+     import('containers/Menu')
+       .then(loadModule(comMod))
+       .catch(errorLoading);
+   },
+ },
+     {
       path: '*',
       name: 'notfound',
       getComponent(nextState, comMod) {

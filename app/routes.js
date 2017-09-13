@@ -45,6 +45,33 @@ export default function createRoutes() {
        .catch(errorLoading);
    },
  },
+   {
+   path: '/DinnerPrint',
+   name: 'dinnerPrint',
+   getComponent(nextState, comMod) {
+     import('containers/DinnerPrint')
+       .then(loadModule(comMod))
+       .catch(errorLoading);
+   },
+  },
+  {
+  path: '/LunchPrint',
+  name: 'lunchPrint',
+  getComponent(nextState, comMod) {
+    import('containers/LunchPrint')
+      .then(loadModule(comMod))
+      .catch(errorLoading);
+   },
+  },
+  {
+  path: '/Database',
+  name: 'database',
+  getComponent(nextState, comMod) {
+    import('containers/Database')
+      .then(loadModule(comMod))
+      .catch(errorLoading);
+   },
+  },
      {
       path: '*',
       name: 'notfound',

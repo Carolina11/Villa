@@ -25,10 +25,9 @@ export default class Menu extends React.PureComponent {
               <h1>Villa Europa</h1><br />
             </div>
             <div className="menuDiv">
-              <div className="menuItem"><a href="Menu">Home</a></div>            
-              <div className="menuItem"><a href="">Lunch Specials</a></div>
-              <div className="menuItem"><a href="">Dinner Specials</a></div>
-              <div className="menuItem"><a href="">Menu item</a></div>
+              <div className="menuItem"><a href="Database">Database</a></div>
+              <div className="menuItem"><a href="LunchPrint">Lunch Specials</a></div>
+              <div className="menuItem"><a href="DinnerPrint">Dinner Specials</a></div>
             </div>
             <div className="imageDiv">
               <img className="villaImg" src={require('../../images/villa01.jpg')} />

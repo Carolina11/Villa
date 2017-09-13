@@ -1,0 +1,22 @@
+/* DinnerPrint Styles */
+
+.container {
+  display:flex;
+  flex-direction:column;
+  align-items: center;
+  font-family: serif;
+  font-style: italic;
+}
+.outLine {
+  width: 8.5in;
+  height: 11in;
+  border: 1px solid #009;
+  text-align: center;
+}
+.specials {
+  width: inherit;
+  height: inherit;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}

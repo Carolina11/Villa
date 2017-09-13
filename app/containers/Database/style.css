@@ -1,0 +1,82 @@
+/* Database Styles */
+
+.container {
+  display:flex;
+  flex-direction:column;
+  align-items: center;
+  min-height:100vh;
+  background-color: rgba(170,102,51,0.5);
+}
+h1 {
+  margin: 20px;
+  color: #fff;
+  text-shadow: 1px 1px #000;
+}
+.formDiv {
+  display:flex;
+  flex-direction:column;
+  width: 60%;
+}
+.formDiv input {
+  margin: 10px;
+  font-size: 1em;
+  padding: 5px;
+  border-radius: 10px;
+}
+.formDiv select {
+  margin: 10px;
+  font-size: 1em;
+  height: 30px;
+  color: #666;
+}
+.formDiv textarea {
+  margin: 10px;
+  font-size: 1em;
+  height: 50px;
+  width: 95%;
+  border: 0;
+  padding: 5px;
+  border-radius: 10px;
+}
+.name {
+  width: 95%;
+}
+.price {
+  width: 75px;
+}
+.dropDowns {
+  display: inline-flex;
+}
+.type {
+  width: 50%;
+}
+.ingredient {
+  width: 50%;
+}
+.pairings {
+  width: 95%;
+}
+.alignDiv {
+  display:inline-flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.buttons {
+  align-self: center;
+  text-align: center;
+  width: 80%;
+}
+.buttons input {
+  width: auto;
+}
+.results {
+  width: 85%;
+  margin: 20px;
+  text-align: center;
+  border-top: 2px solid #fff;
+}
+.results h2 {
+  margin: 10px;
+  color: #fff;
+  text-shadow: 1px 1px #000;
+}

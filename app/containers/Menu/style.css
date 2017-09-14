@@ -21,9 +21,15 @@
   text-shadow: 1px 1px #000;
   padding: 5px;
 }
+.menuDiv div {
+  text-align: center;
+}
 .menuDiv a {
   text-decoration: none;
   color: #fff;
+}
+.menuDiv a:hover {
+  font-style: italic;
 }
 .villaImg {
   border-radius: 50px;

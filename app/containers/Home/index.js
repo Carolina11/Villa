@@ -22,12 +22,13 @@ export default class Home extends React.PureComponent {
         <div className="titleDiv">
           <h1>Villa Europa</h1><br />
         </div>
-        <div className="imageDiv">
-          <img className="villaImg" src={require('../../images/villa01.jpg')} />
-        </div>
         <div className="linksDiv">
         <span><a href="SignIn">Sign in</a></span> <span><a href="SignUp">Sign up</a></span>
         </div>
+        <div className="imageDiv">
+          <img className="villaImg" src={require('../../images/villa01.jpg')} />
+        </div>
+
 
         </div>
 

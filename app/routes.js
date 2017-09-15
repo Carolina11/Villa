@@ -64,6 +64,15 @@ export default function createRoutes() {
    },
   },
   {
+  path: '/LibationsPrint',
+  name: 'libationsPrint',
+  getComponent(nextState, comMod) {
+    import('containers/LibationsPrint')
+      .then(loadModule(comMod))
+      .catch(errorLoading);
+   },
+  },
+  {
   path: '/Database',
   name: 'database',
   getComponent(nextState, comMod) {

@@ -17,11 +17,12 @@ export default class Database extends React.PureComponent {
     this.state={
       types: [],
       ingredients: [],
+      menus: [],
       listItems: [],
       lastSpecial:[],
       allSpecials: [],
       markedSpecials: [],
-      name: '',
+      dish: '',
       description: '',
       type: '',
       ingredient: '',
@@ -36,6 +37,7 @@ export default class Database extends React.PureComponent {
   componentWillMount(){
     this.getTypes();
     this.getIngredients();
+    this.getMenus();
   }
 
   getTypes = () => {
@@ -62,6 +64,20 @@ export default class Database extends React.PureComponent {
     .then(function(json){
       this.setState({
         ingredients:json.ingredients
+      })
+    }.bind(this))
+  };
+
+  getMenus = () => {
+    fetch('http://localhost:8000/api/getMenus', {
+      method: 'get'
+    })
+    .then(function(response){
+      return response.json();
+    })
+    .then(function(json){
+      this.setState({
+        menus:json.menus
       })
     }.bind(this))
   };
@@ -117,24 +133,47 @@ export default class Database extends React.PureComponent {
         </div>
       )
     }
-    else if (this.state.showSpecials.length > 1)
+    else if (this.state.showSpecials.length >= 1)
     {
       return (
         this.state.showSpecials.map((special,index)=>(
-          <div className="specialItem"><p><FaEdit/> {special.name} : {special.description}</p></div>
+          <div className="specialItemDiv">
+            <div className="editButtons">
+            <a href=""><FaEdit/></a> Edit<br/>
+            <form name="toMenuForm" action="#">
+            <input name="toMenu" type="radio" /> Lunch<br/>
+            <input name="toMenu" type="radio" /> Dinner<br/>
+            <input name="toMenu" type="radio" /> Libations<br/>
+            <input type="button" value="Reset Form" onClick="this.form.reset()" />
+            </form>
+            </div>
+            <div className="specialItem">
+              <p>
+                <h3>{special.dish}</h3> Price: {special.price} Type of dish: {special.type}- ({special.type_name}) Main ingredient: {special.ingredient}-({special.ing_name})Description: {special.description}
+              </p>
+            </div>
+          </div>
+
         )));
     }
     else if (!Array.isArray(this.state.showSpecials))
      {
         return (
-        <div className="specialItem"><p><FaEdit/> {this.state.showSpecials.name} - {this.state.showSpecials.description}</p></div>
+        <div className="specialItem">
+          <p>
+            {this.state.showSpecials.dish} Price: {this.state.showSpecials.price} Type of dish: {this.state.showSpecials.type}- ({this.state.showSpecials.type_name}) Main ingredient: {this.state.showSpecials.ingredient}-({this.state.showSpecials.ing_name})Description: {this.state.showSpecials.description}
+          </p>
+        <div>
+          <FaEdit/>
+        </div>
+      </div>
       );
     }
   };
 
-  handleName = (event) =>{
+  handleDish = (event) =>{
     this.setState({
-      name:event.target.value
+      dish:event.target.value
     })
   };
   handleType = (event) =>{
@@ -145,6 +184,11 @@ export default class Database extends React.PureComponent {
   handleIngredient = (event) =>{
     this.setState({
       ingredient:event.target.value
+    })
+  };
+  handleOnMenu = (event) =>{
+    this.setState({
+      menu:event.target.value
     })
   };
   handleDescription = (event) =>{
@@ -162,21 +206,17 @@ export default class Database extends React.PureComponent {
       price:event.target.value
     })
   };
-  handleOnMenu = (event) =>{
-    this.setState({
-      onMenu:event.target.value
-    })
-  };
+
 
   storeItem = () => {
     let data = new FormData();
-    data.append('name', this.state.name);
+    data.append('dish', this.state.dish);
     data.append('type', this.state.type);
     data.append('ingredient', this.state.ingredient);
+    data.append('onMenu', this.state.onMenu);
     data.append('description', this.state.description);
     data.append('pairings', this.state.pairings);
     data.append('price', this.state.price);
-    data.append('onMenu', this.state.onMenu);
 
     fetch('http://localhost:8000/api/storeItem', {
       method: 'POST',
@@ -195,14 +235,17 @@ export default class Database extends React.PureComponent {
     }.bind(this));
     this.getLastSpecial();
     this.setState({
-      name: '',
+      dish: '',
       description: '',
       type: '',
       ingredient: '',
+      onMenu: '',
       pairings: '',
-      price: '',
-      onMenu: ''
+      price: ''
     })
+    document.getElementById("type").selectedIndex=0;
+    document.getElementById("ingredient").selectedIndex=0;
+    document.getElementById("menu").selectedIndex=0;
   };
 
   render() {
@@ -212,12 +255,13 @@ export default class Database extends React.PureComponent {
         <ul className="menuUL">
           <li><a href="LunchPrint" target="_blank">Lunch Specials</a></li>
           <li><a href="DinnerPrint" target="_blank">Dinner Specials</a></li>
+          <li><a href="LibationsPrint" target="_blank">Libations</a></li>
         </ul>
         <h1>Database items</h1>
 
         <div className="formDiv" id="formDiv">
             <h2>Name</h2>
-            <input type="text" className="name" id="name" placeholder="(Name of dish)" value={this.state.name} onChange={this.handleName} />
+            <input type="text" className="dish" id="dish" placeholder="(Name of dish)" value={this.state.dish} onChange={this.handleDish} />
 
 
             <div className="dropDowns">
@@ -232,20 +276,34 @@ export default class Database extends React.PureComponent {
               <select className="type" id="type" onChange={this.handleType} >
                 <option value="0" defaultValue>(Type of dish)</option>
               {this.state.types.map((type,index)=>(
-                <option value={type.id}>{type.name}</option>
+                <option value={type.type_id}>{type.type_name}</option>
               ))}
               </select>
               </div>
+
               <div>
               <h2>Main ingredient</h2>
               <select className="ingredient" id="ingredient" onChange={this.handleIngredient}>
                 <option value="0" defaultValue>(Main ingredient)</option>
                 {this.state.ingredients.map((ingredient,index)=>(
-                  <option value={ingredient.id}>{ingredient.name}</option>
+                  <option value={ingredient.ing_id}>{ingredient.ing_name}</option>
                 ))}
               </select>
               </div>
             </div>
+
+            <div className="menus">
+              <div className="selectMenu">
+                <h2>Select menu</h2>
+              </div>
+              <select className="menu" id="menu" onChange={this.handleonMenu} >
+                <option value="0" defaultValue>(Select menu)</option>
+              {this.state.menus.map((menu,index)=>(
+                <option value={menu.id}>{menu.menu_name}</option>
+              ))}
+              </select>
+            </div>
+
 
             <h2>Description</h2>
 
@@ -253,11 +311,6 @@ export default class Database extends React.PureComponent {
             <h2>Pairings</h2>
             <input type="text" className="pairings" id="pairing" placeholder="(Pairings)" value={this.state.pairings} onChange={this.handlePairings} />
 
-            <div className="alignDiv">
-              <div>
-                <span>Check for menu - -></span><input type="checkbox" className="onMenu" id="onMenu" value={this.state.onMenu} onChange={this.handleOnMenu} />
-              </div>
-            </div>
 
             <div className="buttonsDiv">
               <input type="submit" className="add" value="Add Item" onClick={this.storeItem} />

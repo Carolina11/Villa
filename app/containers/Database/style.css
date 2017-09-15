@@ -82,6 +82,19 @@ h1 {
   width: 40%;
   text-align: left;
 }
+.menus {
+  display: flex;
+  flex-direction: row;
+  width: 70%;
+  align-self: center;
+  justify-content: space-between;
+}
+.selectMenu {
+  align-self:center;
+}
+.menus select {
+  width: 60%;
+}
 .type {
   width: 90%;
 }
@@ -91,14 +104,11 @@ h1 {
 .pairings {
   width: 95%;
 }
-.alignDiv {
-  text-align: right;
-  color: #630;
-}
 .priceDiv {
   display: block-flex;
 }
 .buttonsDiv {
+  margin-top: 10px;
   align-self: center;
   text-align: center;
   width: 80%;
@@ -131,9 +141,18 @@ h1 {
   color: #fff;
   text-shadow: 1px 1px #000;
 }
-.specialItem {
+.specialItemDiv {
+  display: flex;
+  flex-direction: row;
   padding: 5px;
   text-align: left;
   color: #630;
-  border: 1px solid #000;
+  border-top: 2px solid #fff;
+}
+.editButtons {
+  width: 15%;
+  text-align: left;
+}
+.specialItem {
+  width: 85%;
 }

@@ -73,6 +73,9 @@ h1 {
 .price {
   width: 75px;
 }
+.quantity {
+  width: 70px;
+}
 .dropDowns {
   display: flex;
   flex-direction: row;

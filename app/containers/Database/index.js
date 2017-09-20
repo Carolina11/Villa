@@ -22,7 +22,7 @@ export default class Database extends React.PureComponent {
       lastSpecial:[],
       allSpecials: [],
       menuSpecials: [],
-      dish: '',
+      name: '',
       description: '',
       quantity: '',
       type: '',
@@ -83,6 +83,7 @@ export default class Database extends React.PureComponent {
     }.bind(this))
   };
 
+
   getLastSpecial = () => {
     fetch('http://localhost:8000/api/getLastSpecial', {
       method: 'get'
@@ -97,19 +98,6 @@ export default class Database extends React.PureComponent {
     }.bind(this))
   };
 
-  getAllSpecials = () => {
-    fetch('http://localhost:8000/api/getAllSpecials', {
-      method: 'get'
-    })
-    .then(function(response){
-      return response.json();
-    })
-    .then(function(json){
-      this.setState({
-        showSpecials:json.allSpecials,
-      })
-    }.bind(this))
-  };
 
   getMenuSpecials = (onMenuID) => {
     fetch('http://localhost:8000/api/getMenuSpecials?onMenuID=' + onMenuID, {
@@ -127,14 +115,14 @@ export default class Database extends React.PureComponent {
 
   searchSpecials = () => {
     let data = new FormData();
-    data.append('dish', this.state.dish);
+    data.append('name', this.state.name);
     data.append('type', this.state.type);
     data.append('ingredient', this.state.ingredient);
     data.append('description', this.state.description);
 
-
-    fetch('http://localhost:8000/api/searchSpecials?data=' + $data, {
-      method: 'get'
+    fetch('http://localhost:8000/api/searchSpecials', {
+      method: 'POST',
+      body:data
     })
     .then(function(response){
       return response.json();
@@ -143,11 +131,23 @@ export default class Database extends React.PureComponent {
       this.setState({
         showSpecials:json.searchSpecials
       })
-    }.bind(this))
+    }.bind(this));
+    this.setState({
+      name: '',
+      description: '',
+      quantity: '',
+      type: '',
+      ingredient: '',
+      onMenu: '',
+      pairings: '',
+      price: ''
+    })
+    document.getElementById("type").selectedIndex=0;
+    document.getElementById("ingredient").selectedIndex=0;
   };
 
   countSpecials = () => {
-    if(this.state.showSpecials == '')
+    if(this.state.showSpecials === '')
     {
       return (
         <div className="specialItemDiv">
@@ -171,7 +171,7 @@ export default class Database extends React.PureComponent {
             </div>
             <div className="specialItem">
               <p>
-                <h3>{special.dish}</h3> Price: {special.price} Type of dish: {special.type}- ({special.type_name}) Main ingredient: {special.ingredient}-({special.ing_name})Description: {special.description}
+                <h3>{special.name}</h3> Price: {special.price} Type of dish: {special.type}- ({special.name}) Main ingredient: {special.ingredient}-({special.name})Description: {special.description}<br/> {this.special}
               </p>
             </div>
           </div>
@@ -183,7 +183,7 @@ export default class Database extends React.PureComponent {
         return (
         <div className="specialItem">
           <p>
-            {this.state.showSpecials.dish} Price: {this.state.showSpecials.price} Type of dish: {this.state.showSpecials.type}- ({this.state.showSpecials.type_name}) Main ingredient: {this.state.showSpecials.ingredient}-({this.state.showSpecials.ing_name})Description: {this.state.showSpecials.description}
+            {this.state.showSpecials.name} Price: {this.state.showSpecials.price} Type of dish: {this.state.showSpecials.type}- ({this.state.showSpecials.name}) Main ingredient: {this.state.showSpecials.ingredient}-({this.state.showSpecials.name})Description: {this.state.showSpecials.description}
           </p>
         <div>
           <FaEdit/>
@@ -193,9 +193,50 @@ export default class Database extends React.PureComponent {
     }
   };
 
-  handleDish = (event) =>{
+  storeItem = () => {
+    let data = new FormData();
+    data.append('name', this.state.name);
+    data.append('quantity', this.state.quantity);
+    data.append('type', this.state.type);
+    data.append('ingredient', this.state.ingredient);
+    data.append('onMenu', this.state.onMenu);
+    data.append('description', this.state.description);
+    data.append('pairings', this.state.pairings);
+    data.append('price', this.state.price);
+
+    fetch('http://localhost:8000/api/storeItem', {
+      method: 'POST',
+      body:data
+    })
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(json) {
+      let listItems = this.state.listItems;
+      listItems.push(json.special);
+      this.setState({
+        listItems:listItems
+      })
+      this.forceUpdate();
+    }.bind(this));
+    this.getLastSpecial();
     this.setState({
-      dish:event.target.value
+      name: '',
+      description: '',
+      quantity: '',
+      type: '',
+      ingredient: '',
+      onMenu: '',
+      pairings: '',
+      price: ''
+    })
+    document.getElementById("type").selectedIndex=0;
+    document.getElementById("ingredient").selectedIndex=0;
+  };
+
+  handleName = (event) =>{
+    this.setState({
+      name:event.target.value
     })
   };
   handleType = (event) =>{
@@ -234,49 +275,6 @@ export default class Database extends React.PureComponent {
     })
   };
 
-
-  storeItem = () => {
-    let data = new FormData();
-    data.append('dish', this.state.dish);
-    data.append('quantity', this.state.quantity);
-    data.append('type', this.state.type);
-    data.append('ingredient', this.state.ingredient);
-    data.append('onMenu', this.state.onMenu);
-    data.append('description', this.state.description);
-    data.append('pairings', this.state.pairings);
-    data.append('price', this.state.price);
-
-    fetch('http://localhost:8000/api/storeItem', {
-      method: 'POST',
-      body:data
-    })
-    .then(function(response) {
-      return response.json();
-    })
-    .then(function(json) {
-      let listItems = this.state.listItems;
-      listItems.push(json.special);
-      this.setState({
-        listItems:listItems
-      })
-      this.forceUpdate();
-    }.bind(this));
-    this.getLastSpecial();
-    this.setState({
-      dish: '',
-      description: '',
-      quantity: '',
-      type: '',
-      ingredient: '',
-      onMenu: '',
-      pairings: '',
-      price: ''
-    })
-    document.getElementById("type").selectedIndex=0;
-    document.getElementById("ingredient").selectedIndex=0;
-    document.getElementById("menu").selectedIndex=0;
-  };
-
   render() {
     return (
       <div className="container">
@@ -290,7 +288,7 @@ export default class Database extends React.PureComponent {
 
         <div className="formDiv" id="formDiv">
             <h2>Name</h2>
-            <input type="text" className="dish" id="dish" placeholder="(Name of dish)" value={this.state.dish} onChange={this.handleDish} />
+            <input type="text" className="name" id="name" placeholder="(Name of name)" value={this.state.name} onChange={this.handleName} />
 
 
             <div className="dropDowns">
@@ -310,7 +308,7 @@ export default class Database extends React.PureComponent {
               <select className="type" id="type" onChange={this.handleType} >
                 <option value="0" defaultValue>(Type of dish)</option>
               {this.state.types.map((type,index)=>(
-                <option value={type.type_id}>{type.type_name}</option>
+                <option value={type.id}>{type.name}</option>
               ))}
               </select>
               </div>
@@ -320,7 +318,7 @@ export default class Database extends React.PureComponent {
               <select className="ingredient" id="ingredient" onChange={this.handleIngredient}>
                 <option value="0" defaultValue>(Main ingredient)</option>
                 {this.state.ingredients.map((ingredient,index)=>(
-                  <option value={ingredient.ing_id}>{ingredient.ing_name}</option>
+                  <option value={ingredient.id}>{ingredient.name}</option>
                 ))}
               </select>
               </div>

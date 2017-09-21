@@ -39,12 +39,17 @@ h1 {
   flex-direction:column;
   width: 60%;
 }
-.formDiv h2{
+.formDiv h2 {
   font-size: 18px;
   text-align: left;
   margin-left: 10px;
   color: #fff;
   text-shadow: 1px 1px #000;
+}
+.results h2 {
+  font-family: sans-serif;
+  font-size: 16px;
+  font-style: italic;
 }
 .formDiv input {
   margin: 5px;
@@ -133,7 +138,8 @@ h1 {
   outline-style: none;
   box-shadow: 2px 2px 2px 2px #630;
 }
-.results {;
+.results {
+  font-family: sans-serif;
   width: 85%;
   margin: 10px;
   text-align: center;
@@ -145,6 +151,7 @@ h1 {
   text-shadow: 1px 1px #000;
 }
 .specialItemDiv {
+  font-family: sans-serif;
   display: flex;
   flex-direction: row;
   padding: 5px;
@@ -156,6 +163,13 @@ h1 {
   width: 15%;
   text-align: left;
 }
+.editButtons a {
+  color: inherit;
+}
 .specialItem {
   width: 85%;
+}
+.specialItem p div {
+  font-family: sans-serif;
+  font-size: 16px;
 }

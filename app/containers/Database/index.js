@@ -32,6 +32,7 @@ export default class Database extends React.PureComponent {
       onMenu: '',
       special: [],
       showSpecials: '',
+      editItem:''
     }
   }
 
@@ -132,7 +133,7 @@ export default class Database extends React.PureComponent {
         showSpecials:json.searchSpecials
       })
     }.bind(this));
-    this.setState({
+     this.setState({
       name: '',
       description: '',
       quantity: '',
@@ -145,6 +146,22 @@ export default class Database extends React.PureComponent {
     document.getElementById("type").selectedIndex=0;
     document.getElementById("ingredient").selectedIndex=0;
   };
+
+  editItem = (itemID) => {
+    this.searchSpecials(itemID);
+
+
+    this.setState({
+     name: this.state.editItem.name,
+     description: '',
+     quantity: '',
+     type: '',
+     ingredient: '',
+     onMenu: '',
+     pairings: '',
+     price: ''
+   }, function() {console.log(this.state.name);})
+  }
 
   countSpecials = () => {
     if(this.state.showSpecials === '')
@@ -161,34 +178,49 @@ export default class Database extends React.PureComponent {
         this.state.showSpecials.map((special,index)=>(
           <div className="specialItemDiv">
             <div className="editButtons">
-            <a href=""><FaEdit/></a> Edit<br/>
+            <a href="#" onClick={() => this.editItem(special.id)}><FaEdit/> Edit item</a><br/>
             <form name="toMenuForm" action="#">
+            <p>Add to menu:</p>
             <input name="toMenu" value="1" type="radio" /> Lunch<br/>
             <input name="toMenu" value="2" type="radio" /> Dinner<br/>
             <input name="toMenu" value="3" type="radio" /> Libations<br/>
-            <input type="button" value="Reset Form" onClick="this.form.reset()" />
             </form>
             </div>
             <div className="specialItem">
               <p>
-                <h3>{special.name}</h3> Price: {special.price} Type of dish: {special.type}- ({special.name}) Main ingredient: {special.ingredient}-({special.name})Description: {special.description}<br/> {this.special}
+                <h3>{special.name} ... {special.price}</h3>
+                <h2>{special.description}</h2>
+                <div>
+                  Type of dish: {special.type}<br />Main ingredient: {special.ingredient}
+                </div>
               </p>
             </div>
           </div>
-
         )));
     }
     else if (!Array.isArray(this.state.showSpecials))
      {
         return (
-        <div className="specialItem">
-          <p>
-            {this.state.showSpecials.name} Price: {this.state.showSpecials.price} Type of dish: {this.state.showSpecials.type}- ({this.state.showSpecials.name}) Main ingredient: {this.state.showSpecials.ingredient}-({this.state.showSpecials.name})Description: {this.state.showSpecials.description}
-          </p>
-        <div>
-          <FaEdit/>
-        </div>
-      </div>
+          <div className="specialItemDiv">
+            <div className="editButtons">
+            <a href=""><FaEdit/></a> Edit item<br/>
+            <form name="toMenuForm" action="#">
+            <p>Add to menu</p>
+            <input name="toMenu" value="1" type="radio" /> Lunch<br/>
+            <input name="toMenu" value="2" type="radio"/> Dinner<br/>
+            <input name="toMenu" value="3" type="radio" /> Libations<br/>
+            </form>
+            </div>
+            <div className="specialItem">
+              <p>
+                <h3>{this.state.showSpecials.name} ... {this.state.showSpecials.price}</h3>
+                <h2>{this.state.showSpecials.description}</h2>
+                <div>
+                  Type of dish: {this.state.showSpecials.type}<br />Main ingredient: {this.state.showSpecials.ingredient}
+                </div>
+              </p>
+            </div>
+          </div>
       );
     }
   };
@@ -288,8 +320,7 @@ export default class Database extends React.PureComponent {
 
         <div className="formDiv" id="formDiv">
             <h2>Name</h2>
-            <input type="text" className="name" id="name" placeholder="(Name of name)" value={this.state.name} onChange={this.handleName} />
-
+            <input type="text" className="name" id="name" placeholder="(Name of dish)" value={this.state.name} onChange={this.handleName} />
 
             <div className="dropDowns">
 
@@ -349,6 +380,8 @@ export default class Database extends React.PureComponent {
           <h1>Results</h1>
             <div>
               {this.countSpecials()}
+              <br/>
+              <br/>
             </div>
         </div>
 

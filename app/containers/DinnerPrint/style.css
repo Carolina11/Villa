@@ -8,6 +8,7 @@
   font-style: italic;
 }
 .outLine {
+  margin: 30px;
   width: 8.5in;
   height: 11in;
   border: 1px solid #009;
@@ -21,7 +22,7 @@
   justify-content: space-between;
 }
 .specialItem {
-  margin: 20px;
+  margin: 10px;
 }
 h1 {
 font-size: 30px;

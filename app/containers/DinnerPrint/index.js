@@ -16,13 +16,32 @@ export default class DinnerPrint extends React.PureComponent {
   constructor() {
     super();
     this.state={
+      getDate: '',
       showSpecials: [],
       soups: [],
       appetizers: [],
       entrees: [],
       desserts: [],
-      beers: []
+      beers: [],
     }
+  };
+
+  getDate = () => {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1;
+    var yyyy = today.getFullYear();
+
+    if(dd<10) {
+      dd = '0'+dd
+    }
+
+    if(mm<10) {
+      mm = '0'+mm
+    }
+
+    today = mm + '/' + dd + '/' + yyyy;
+    return today;
   };
 
   componentWillMount(){
@@ -125,7 +144,7 @@ export default class DinnerPrint extends React.PureComponent {
                 <h2>Soups of the Day: Our Famous Potato or {soup.name}</h2>
                 </div>
                 ))}
-              <h2>*** Appetizers ***</h2>
+              <h2>* Appetizers *</h2>
               {this.state.appetizers.map((appetizer, index) => (
                 <div className="specialItem">
                 <h3>{appetizer.name} ... {appetizer.price}</h3>
@@ -135,7 +154,7 @@ export default class DinnerPrint extends React.PureComponent {
             </div>
 
               <div className="entrees">
-                <h2>*** Entrees ***</h2>
+                <h2>* Entrees *</h2>
                 {this.state.entrees.map((entree, index) => (
                 <div className="specialItem">
                 <h3>{entree.name} ... {entree.price}</h3>
@@ -147,7 +166,7 @@ export default class DinnerPrint extends React.PureComponent {
               </div>
 
               <div className="desserts">
-                 <h2>*** Desserts ***</h2>
+                 <h2>* Desserts *</h2>
                  {this.state.desserts.map((dessert, index) => (
                 <div className="specialItem">
                 <h3>{dessert.name} ... {dessert.price}</h3>
@@ -155,8 +174,6 @@ export default class DinnerPrint extends React.PureComponent {
                 </div>
               ))}
               </div>
-
-              <br/>
 
             <div className="libations">
               <h2>Beer News</h2>
@@ -168,6 +185,7 @@ export default class DinnerPrint extends React.PureComponent {
               <h2></h2>
             </div>
           </div>
+          {this.getDate()}
        </div>
     </div>
     );

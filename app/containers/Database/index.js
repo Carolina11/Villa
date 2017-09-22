@@ -111,7 +111,10 @@ export default class Database extends React.PureComponent {
       this.setState({
         showSpecials:json.menuSpecials
       })
-    }.bind(this))
+    }.bind(this));console.log(this.state.showSpecials);
+    this.setState({
+      name: ''
+    })
   };
 
   searchSpecials = () => {
@@ -147,20 +150,56 @@ export default class Database extends React.PureComponent {
     document.getElementById("ingredient").selectedIndex=0;
   };
 
+// fix this:
   editItem = (itemID) => {
-    this.searchSpecials(itemID);
+    let data = new FormData();
+    data.append('id', itemID);
 
+    fetch('http://localhost:8000/api/searchSpecials?id=' + itemID, {
+      method: 'POST',
+      body:data
+    })
+    .then(function(response){
+      return response.json();
+    })
+    .then(function(json){
+      this.setState({
+        showSpecials:json.searchSpecials
+      })
+      this.forceUpdate();
+    }.bind(this));
+console.log(this.state.showSpecials);
+      this.setState({
+      name: '',
+      description: '',
+      quantity: '',
+      type: '',
+      ingredient: '',
+      onMenu: '',
+      pairings: '',
+      price: ''
+    })
+    document.getElementById("type").selectedIndex=0;
+    document.getElementById("ingredient").selectedIndex=0;
+  };
 
-    this.setState({
-     name: this.state.editItem.name,
-     description: '',
-     quantity: '',
-     type: '',
-     ingredient: '',
-     onMenu: '',
-     pairings: '',
-     price: ''
-   }, function() {console.log(this.state.name);})
+  toggleMenu = (itemID, menuNum) => {
+    let data = new FormData();
+    data.append('id', itemID);
+    data.append('onMenu', menuNum);
+
+    fetch('http://localhost:8000/api/toggleMenu?id=' + itemID, {
+      method: 'POST',
+      body: data
+    })
+    .then(function(response){
+      return response.json();
+    })
+    .then(function(json){
+      this.setState({
+        showSpecials:json.searchSpecials
+      })
+    }.bind(this));
   }
 
   countSpecials = () => {
@@ -178,22 +217,21 @@ export default class Database extends React.PureComponent {
         this.state.showSpecials.map((special,index)=>(
           <div className="specialItemDiv">
             <div className="editButtons">
-            <a href="#" onClick={() => this.editItem(special.id)}><FaEdit/> Edit item</a><br/>
-            <form name="toMenuForm" action="#">
+            <a href="#" onClick={() => this.editItem(special.id)}><FaEdit/> Edit item ({special.id})</a><br/>
             <p>Add to menu:</p>
-            <input name="toMenu" value="1" type="radio" /> Lunch<br/>
-            <input name="toMenu" value="2" type="radio" /> Dinner<br/>
-            <input name="toMenu" value="3" type="radio" /> Libations<br/>
-            </form>
+            <ul>
+              <li><a href="#" onClick={() => this.toggleMenu(special.id,1)} >Lunch ({special.menuID})</a></li>
+              <li><a href="#" onClick={() => this.toggleMenu(special.id,2)} >Dinner</a></li>
+              <li><a href="#" onClick={() => this.toggleMenu(special.id,3)} >Libations</a></li>
+              <li><a href="#" onClick={() => this.toggleMenu(special.id,0)} >Remove from menu</a></li>
+            </ul>
             </div>
             <div className="specialItem">
-              <p>
-                <h3>{special.name} ... {special.price}</h3>
+                <h3>{special.name} ...! {special.price}</h3>
                 <h2>{special.description}</h2>
                 <div>
                   Type of dish: {special.type}<br />Main ingredient: {special.ingredient}
                 </div>
-              </p>
             </div>
           </div>
         )));
@@ -204,21 +242,17 @@ export default class Database extends React.PureComponent {
           <div className="specialItemDiv">
             <div className="editButtons">
             <a href=""><FaEdit/></a> Edit item<br/>
-            <form name="toMenuForm" action="#">
-            <p>Add to menu</p>
-            <input name="toMenu" value="1" type="radio" /> Lunch<br/>
+            Add to menu:
+            <input name="toMenu" value="1" type="radio"  /> Lunch<br/>
             <input name="toMenu" value="2" type="radio"/> Dinner<br/>
             <input name="toMenu" value="3" type="radio" /> Libations<br/>
-            </form>
             </div>
             <div className="specialItem">
-              <p>
                 <h3>{this.state.showSpecials.name} ... {this.state.showSpecials.price}</h3>
                 <h2>{this.state.showSpecials.description}</h2>
                 <div>
                   Type of dish: {this.state.showSpecials.type}<br />Main ingredient: {this.state.showSpecials.ingredient}
                 </div>
-              </p>
             </div>
           </div>
       );

@@ -32,7 +32,8 @@ export default class Database extends React.PureComponent {
       onMenu: '',
       special: [],
       showSpecials: '',
-      editItem:''
+      editItem:'',
+      populateForm: ''
     }
   }
 
@@ -111,10 +112,7 @@ export default class Database extends React.PureComponent {
       this.setState({
         showSpecials:json.menuSpecials
       })
-    }.bind(this));console.log(this.state.showSpecials);
-    this.setState({
-      name: ''
-    })
+    }.bind(this));
   };
 
   searchSpecials = () => {
@@ -150,6 +148,7 @@ export default class Database extends React.PureComponent {
     document.getElementById("ingredient").selectedIndex=0;
   };
 
+
 // fix this:
   editItem = (itemID) => {
     let data = new FormData();
@@ -168,19 +167,20 @@ export default class Database extends React.PureComponent {
       })
       this.forceUpdate();
     }.bind(this));
-console.log(this.state.showSpecials);
-      this.setState({
-      name: '',
-      description: '',
-      quantity: '',
-      type: '',
-      ingredient: '',
-      onMenu: '',
-      pairings: '',
-      price: ''
-    })
-    document.getElementById("type").selectedIndex=0;
-    document.getElementById("ingredient").selectedIndex=0;
+    console.log(this.state.showSpecials);
+          this.setState({
+          populateForm: 'edit',
+          name: 'frack! it\'s giving me the previous object, not the updated one.',
+          description: '',
+          quantity: '',
+          type: '',
+          ingredient: '',
+          onMenu: '',
+          pairings: '',
+          price: ''
+        })
+        document.getElementById("type").selectedIndex=0;
+        document.getElementById("ingredient").selectedIndex=0;
   };
 
   toggleMenu = (itemID, menuNum) => {

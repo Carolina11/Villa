@@ -10,6 +10,7 @@ import Helmet from 'react-helmet';
 import './style.css';
 import './styleM.css';
 
+import CheckToken from 'components/CheckToken';
 
 export default class DinnerPrint extends React.PureComponent {
 
@@ -130,9 +131,9 @@ export default class DinnerPrint extends React.PureComponent {
 
 
   render() {
-
     return (
       <div className="container">
+        <CheckToken />
         <Helmet title="DinnerPrint" meta={[ { name: 'description', content: 'Description of DinnerPrint' }]}/>
 
         <div className="outLine">

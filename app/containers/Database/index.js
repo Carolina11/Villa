@@ -6,10 +6,12 @@
 
 import React from 'react';
 import Helmet from 'react-helmet';
-import FaEdit from 'react-icons/lib/fa/edit';
 
 import './style.css';
 import './styleM.css';
+
+import CheckToken from 'components/CheckToken';
+import FaEdit from 'react-icons/lib/fa/edit';
 
 export default class Database extends React.PureComponent {
   constructor() {
@@ -31,9 +33,10 @@ export default class Database extends React.PureComponent {
       price: '',
       onMenu: '',
       special: [],
-      showSpecials: '',
+      showSpecials: [],
       editItem:'',
-      populateForm: ''
+      updateItem: '',
+      itemID:''
     }
   }
 
@@ -87,15 +90,18 @@ export default class Database extends React.PureComponent {
 
 
   getLastSpecial = () => {
+
     fetch('http://localhost:8000/api/getLastSpecial', {
-      method: 'get'
+      method: 'GET',
     })
     .then(function(response){
       return response.json();
     })
     .then(function(json){
+      let showSpecials = [];
+      showSpecials.push(json.lastSpecial);
       this.setState({
-        showSpecials:json.lastSpecial
+        showSpecials:showSpecials
       })
     }.bind(this))
   };
@@ -150,45 +156,41 @@ export default class Database extends React.PureComponent {
 
 
 // fix this:
-  editItem = (itemID) => {
-    let data = new FormData();
-    data.append('id', itemID);
+  editItem = (special) => {
+    let showSpecials = [];
+    showSpecials.push(special);
 
-    fetch('http://localhost:8000/api/searchSpecials?id=' + itemID, {
-      method: 'POST',
-      body:data
+    this.setState({
+      showSpecials:showSpecials,
+      name: special.name,
+      description: special.description,
+      quantity: special.quantity,
+      pairings: special.pairings,
+      price: special.price
     })
-    .then(function(response){
-      return response.json();
-    })
-    .then(function(json){
-      this.setState({
-        showSpecials:json.searchSpecials
-      })
-      this.forceUpdate();
-    }.bind(this));
-    console.log(this.state.showSpecials);
-          this.setState({
-          populateForm: 'edit',
-          name: 'frack! it\'s giving me the previous object, not the updated one.',
-          description: '',
-          quantity: '',
-          type: '',
-          ingredient: '',
-          onMenu: '',
-          pairings: '',
-          price: ''
-        })
-        document.getElementById("type").selectedIndex=0;
-        document.getElementById("ingredient").selectedIndex=0;
+    document.getElementById("type").selectedIndex=special.typeID;
+    document.getElementById("ingredient").selectedIndex=special.ingredientID;
+
+    this.forceUpdate();
   };
 
-  toggleMenu = (itemID, menuNum) => {
+  updateItem = (special) => {
+    console.log(special);
     let data = new FormData();
-    data.append('id', itemID);
-    data.append('onMenu', menuNum);
+    data.append('id', special.id);
+    data.append('name', this.state.name);
+    data.append('quantity', this.state.quantity);
+    data.append('type', this.state.type);
+    data.append('onMenu', special.onMenuID);
+    data.append('ingredient', this.state.ingredient);
+    data.append('description', this.state.description);
+    data.append('pairings', this.state.pairings);
+    data.append('price', this.state.price);
 
-    fetch('http://localhost:8000/api/toggleMenu?id=' + itemID, {
+    console.log(special.id);
+    console.log(this.state.name);
+
+    fetch('http://localhost:8000/api/updateItem', {
       method: 'POST',
       body: data
     })
@@ -200,6 +202,88 @@ export default class Database extends React.PureComponent {
         showSpecials:json.searchSpecials
       })
     }.bind(this));
+    this.setState({
+      name: '',
+      price: '',
+      quantity: '',
+      description: '',
+      pairings: ''
+    })
+    document.getElementById("type").selectedIndex=0;
+    document.getElementById("ingredient").selectedIndex=0;
+  }
+
+
+  toggleMenu = (itemID, menuNum) => {
+    let data = new FormData();
+    data.append('id', itemID);
+    data.append('onMenu', menuNum);
+
+    fetch('http://localhost:8000/api/toggleMenu', {
+      method: 'POST',
+      body: data
+    })
+    .then(function(response){
+      return response.json();
+    })
+    .then(function(json){
+      this.setState({
+        showSpecials:json.searchSpecials
+      })
+    }.bind(this));
+  }
+
+  renderHighlight = (special) => {
+    if (special.onMenu === null || special.onMenu === 0)
+    {
+      return(
+      <div>
+        <a href="#" onClick={() => this.editItem(special)}><FaEdit/> Edit item</a><br/>
+        <p>Add to menu:</p>
+        <ul>
+          <li><a href="#" onClick={() => this.toggleMenu(special.id,1)} >Lunch</a></li>
+          <li><a href="#" onClick={() => this.toggleMenu(special.id,2)} >Dinner</a></li>
+          <li><a href="#" onClick={() => this.toggleMenu(special.id,3)} >Libations</a></li>
+        </ul>
+      </div>
+    )
+    }
+    else if(special.onMenu === 1) {
+      return(
+        <div>
+          <a href="#" onClick={() => this.editItem(special)}><FaEdit/> Edit item</a><br/>
+          <p>On menu:</p>
+          <ul>
+            <li><a href="#" onClick={() => this.toggleMenu(special.id,1)} style={{fontWeight:'bold'}}>Lunch</a></li>
+            <li><a href="#" onClick={() => this.toggleMenu(special.id,0)} >Remove from menu</a></li>
+          </ul>
+        </div>
+      )
+    }
+    else if(special.onMenu === 2) {
+      return(
+        <div>
+          <a href="#" onClick={() => this.editItem(special)}><FaEdit/> Edit item</a><br/>
+          <p>On menu:</p>
+          <ul>
+            <li><a href="#" onClick={() => this.toggleMenu(special.id,2)} style={{fontWeight:'bold'}}>Dinner</a></li>
+            <li><a href="#" onClick={() => this.toggleMenu(special.id,0)} >Remove from menu</a></li>
+          </ul>
+        </div>
+      )
+    }
+    else if(special.onMenu === 3) {
+      return(
+        <div>
+          <a href="#" onClick={() => this.editItem(special)}><FaEdit/> Edit item</a><br/>
+          <p>On menu:</p>
+          <ul>
+            <li><a href="#" onClick={() => this.toggleMenu(special.id,3)} style={{fontWeight:'bold'}}>Libations</a></li>
+            <li><a href="#" onClick={() => this.toggleMenu(special.id,0)} >Remove from menu</a></li>
+          </ul>
+        </div>
+      )
+    }
   }
 
   countSpecials = () => {
@@ -217,20 +301,13 @@ export default class Database extends React.PureComponent {
         this.state.showSpecials.map((special,index)=>(
           <div className="specialItemDiv">
             <div className="editButtons">
-            <a href="#" onClick={() => this.editItem(special.id)}><FaEdit/> Edit item ({special.id})</a><br/>
-            <p>Add to menu:</p>
-            <ul>
-              <li><a href="#" onClick={() => this.toggleMenu(special.id,1)} >Lunch ({special.menuID})</a></li>
-              <li><a href="#" onClick={() => this.toggleMenu(special.id,2)} >Dinner</a></li>
-              <li><a href="#" onClick={() => this.toggleMenu(special.id,3)} >Libations</a></li>
-              <li><a href="#" onClick={() => this.toggleMenu(special.id,0)} >Remove from menu</a></li>
-            </ul>
+            {this.renderHighlight(special)}
             </div>
             <div className="specialItem">
                 <h3>{special.name} ...! {special.price}</h3>
                 <h2>{special.description}</h2>
                 <div>
-                  Type of dish: {special.type}<br />Main ingredient: {special.ingredient}
+                  Type of dish: {special.type}<br/>Main ingredient: {special.ingredient}<br/>
                 </div>
             </div>
           </div>
@@ -243,12 +320,12 @@ export default class Database extends React.PureComponent {
             <div className="editButtons">
             <a href=""><FaEdit/></a> Edit item<br/>
             Add to menu:
-            <input name="toMenu" value="1" type="radio"  /> Lunch<br/>
-            <input name="toMenu" value="2" type="radio"/> Dinner<br/>
+            <input name="toMenu" value="1" type="radio" /> Lunch<br/>
+            <input name="toMenu" value="2" type="radio" /> Dinner<br/>
             <input name="toMenu" value="3" type="radio" /> Libations<br/>
             </div>
             <div className="specialItem">
-                <h3>{this.state.showSpecials.name} ... {this.state.showSpecials.price}</h3>
+                <h3>get rid of this</h3>
                 <h2>{this.state.showSpecials.description}</h2>
                 <div>
                   Type of dish: {this.state.showSpecials.type}<br />Main ingredient: {this.state.showSpecials.ingredient}
@@ -265,7 +342,7 @@ export default class Database extends React.PureComponent {
     data.append('quantity', this.state.quantity);
     data.append('type', this.state.type);
     data.append('ingredient', this.state.ingredient);
-    data.append('onMenu', this.state.onMenu);
+    data.append('onMenu', 0);
     data.append('description', this.state.description);
     data.append('pairings', this.state.pairings);
     data.append('price', this.state.price);
@@ -342,6 +419,7 @@ export default class Database extends React.PureComponent {
   };
 
   render() {
+    <CheckToken />
     return (
       <div className="container">
         <Helmet title="Database" meta={[ { name: 'description', content: 'Description of Database' }]}/>
@@ -399,7 +477,7 @@ export default class Database extends React.PureComponent {
 
             <div className="buttonsDiv">
               <input type="submit" className="add" value="Add Item" onClick={this.storeItem} />
-              <input type="submit" className="update" value="Update Item" onClick="" />
+              <input type="submit" className="update" value="Update Item" onClick={() => this.updateItem(this.state.showSpecials)} />
               <input type="submit" className="search" value="Search" onClick={this.searchSpecials} />
             </div>
 

@@ -10,11 +10,15 @@ import Helmet from 'react-helmet';
 import './style.css';
 import './styleM.css';
 
+import CheckToken from 'components/CheckToken';
+
 export default class Menu extends React.PureComponent {
+
 
   render() {
     return (
       <div className="container">
+        <CheckToken />
         <Helmet title="Menu" meta={[ { name: 'description', content: 'Description of Menu' }]}/>
 
 

@@ -234,6 +234,7 @@ export default class Database extends React.PureComponent {
   }
 
   renderHighlight = (special) => {
+    console.log(special);
     if (special.onMenu === null || special.onMenu === 0)
     {
       return(
@@ -304,7 +305,7 @@ export default class Database extends React.PureComponent {
             {this.renderHighlight(special)}
             </div>
             <div className="specialItem">
-                <h3>{special.name} ...! {special.price}</h3>
+                <h3>{special.name} ... {special.price}</h3>
                 <h2>{special.description}</h2>
                 <div>
                   Type of dish: {special.type}<br/>Main ingredient: {special.ingredient}<br/>
@@ -419,7 +420,6 @@ export default class Database extends React.PureComponent {
   };
 
   render() {
-    <CheckToken />
     return (
       <div className="container">
         <Helmet title="Database" meta={[ { name: 'description', content: 'Description of Database' }]}/>

@@ -177,17 +177,17 @@ export default class Database extends React.PureComponent {
   updateItem = (special) => {
     console.log(special);
     let data = new FormData();
-    data.append('id', special.id);
+    data.append('id', special[0].id);
     data.append('name', this.state.name);
     data.append('quantity', this.state.quantity);
     data.append('type', this.state.type);
-    data.append('onMenu', special.onMenuID);
+    data.append('onMenu', special[0].onMenuID);
     data.append('ingredient', this.state.ingredient);
     data.append('description', this.state.description);
     data.append('pairings', this.state.pairings);
     data.append('price', this.state.price);
 
-    console.log(special.id);
+    console.log(special[0].id);
     console.log(this.state.name);
 
     fetch('http://localhost:8000/api/updateItem', {

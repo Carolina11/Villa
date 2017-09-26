@@ -134,7 +134,6 @@
    render() {
      return (
        <div className="container">
-         <CheckToken />
          <Helmet title="LunchPrint" meta={[ { name: 'description', content: 'Description of LunchPrint' }]}/>
 
          <div className="outLine">

@@ -133,7 +133,6 @@ export default class DinnerPrint extends React.PureComponent {
   render() {
     return (
       <div className="container">
-        <CheckToken />
         <Helmet title="DinnerPrint" meta={[ { name: 'description', content: 'Description of DinnerPrint' }]}/>
 
         <div className="outLine">

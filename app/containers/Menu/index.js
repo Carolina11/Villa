@@ -18,7 +18,7 @@ export default class Menu extends React.PureComponent {
   render() {
     return (
       <div className="container">
-        <CheckToken />
+        
         <Helmet title="Menu" meta={[ { name: 'description', content: 'Description of Menu' }]}/>
 
 

@@ -9,8 +9,8 @@
 }
 .outLine {
   margin: 30px;
-  width: 8.5in;
-  height: 11in;
+  width: 8in;
+  height: 10.2in;
   border: 1px solid #009;
   text-align: center;
 }
@@ -24,15 +24,26 @@
 .specialItem {
   margin: 10px;
 }
+.date {
+  text-align: left;
+  vertical-align: baseline;
+  margin-bottom: 50px;
+  margin-left: 5px;
+}
+p {
+  font-family: serif;
+  font-size: 18px;
+}
 h1 {
-font-size: 30px;
+  font-size: 28px;
 }
-h2 {
-font-size: 28px;
+  h2 {
+  font-size: 22px;
 }
-h3 {
-font-size: 24px;
+  h3 {
+  font-size: 20px;
 }
-h4 {
-font-size: 20px;
+  h4 {
+  font-size: 18px;
+  font-weight: normal;
 }

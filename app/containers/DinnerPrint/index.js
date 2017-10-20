@@ -42,7 +42,11 @@ export default class DinnerPrint extends React.PureComponent {
     }
 
     today = mm + '/' + dd + '/' + yyyy;
-    return today;
+    return(
+      <div className="date">
+        {today}
+      </div>
+    );
   };
 
   componentWillMount(){
@@ -50,6 +54,7 @@ export default class DinnerPrint extends React.PureComponent {
     this.getAppetizers();
     this.getEntrees();
     this.getDesserts();
+    this.getBeers();
   };
 
   getSoups = () => {
@@ -116,6 +121,7 @@ export default class DinnerPrint extends React.PureComponent {
   };
 
   getBeers = () => {
+    console.log('here: ');
     fetch('http://localhost:8000/api/getMenuSpecials?onMenuID=' + 2 + '&type=' + 5, {
       method: 'get'
     })
@@ -136,14 +142,14 @@ export default class DinnerPrint extends React.PureComponent {
         <Helmet title="DinnerPrint" meta={[ { name: 'description', content: 'Description of DinnerPrint' }]}/>
 
         <div className="outLine">
-          <h1>Evening Extras</h1>
+          <h1>Evening Extras</h1><br/>
           <div className="specials">
             <div className="firsts">
               {this.state.soups.map((soup, index) => (
                 <div className="specialItem">
                 <h2>Soups of the Day: Our Famous Potato or {soup.name}</h2>
                 </div>
-                ))}
+              ))}<br/>
               <h2>* Appetizers *</h2>
               {this.state.appetizers.map((appetizer, index) => (
                 <div className="specialItem">
@@ -174,18 +180,21 @@ export default class DinnerPrint extends React.PureComponent {
                 </div>
               ))}
               </div>
-
-            <div className="libations">
-              <h2>Beer News</h2>
-              <br/>
-              <h3>Samuel Adams Seasonal is ***</h3>
-              <h3>Traveling Beer Tap is ***</h3>
-            </div>
-            <div className="notes">
-              <h2></h2>
-            </div>
+              <div className="notes">
+                <h2>* Notes *</h2>
+              </div>
+              <div className="beers">
+                <h2> *Beer News *</h2>
+                <h3>Samuel Adams Seasonal is ***</h3><h3>Traveling Beer Tap is ***</h3>
+                {this.state.beers.map((beer, index) => (
+               <div className="specialItem">
+               <h3>{beer.name} ... {beer.price}</h3>
+               <h4>{beer.description}</h4>
+               </div>
+             ))}
+              </div>
+            {this.getDate()}
           </div>
-          {this.getDate()}
        </div>
     </div>
     );

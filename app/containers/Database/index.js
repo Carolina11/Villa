@@ -36,7 +36,8 @@ export default class Database extends React.PureComponent {
       showSpecials: [],
       editItem:'',
       updateItem: '',
-      itemID:''
+      itemID:'',
+      whichMenu: 0
     }
   }
 
@@ -44,6 +45,17 @@ export default class Database extends React.PureComponent {
     this.getTypes();
     this.getIngredients();
     this.getMenus();
+  }
+  componentDidMount(){
+    this.disableEditButton();
+  }
+
+  disableEditButton = () => {
+    document.getElementById('editButton').style.color = '#ccc';
+    document.getElementById('editButton').style.backgroundColor = '#fff';
+    document.getElementById('editButton').style.border = 'none';
+    document.getElementById('editButton').style.boxShadow = 'none';
+    document.getElementById('editButton').disabled = 'true';
   }
 
   getTypes = () => {
@@ -171,6 +183,23 @@ export default class Database extends React.PureComponent {
     document.getElementById("type").selectedIndex=special.typeID;
     document.getElementById("ingredient").selectedIndex=special.ingredientID;
 
+    document.getElementById('editButton').style.color = '';
+    document.getElementById('editButton').style.backgroundColor = '';
+    document.getElementById('editButton').style.border = '';
+    document.getElementById('editButton').style.boxShadow = '';
+    document.getElementById('editButton').disabled = '';
+
+    document.getElementById('addButton').style.color = '#ccc';
+    document.getElementById('addButton').style.backgroundColor = '#fff';
+    document.getElementById('addButton').style.border = 'none';
+    document.getElementById('addButton').style.boxShadow = 'none';
+    document.getElementById('addButton').disabled = 'true';
+    document.getElementById('searchButton').style.color = '#ccc';
+    document.getElementById('searchButton').style.backgroundColor = '#fff';
+    document.getElementById('searchButton').style.border = 'none';
+    document.getElementById('searchButton').style.boxShadow = 'none';
+    document.getElementById('searchButton').disabled = 'true';
+
     this.forceUpdate();
   };
 
@@ -211,6 +240,23 @@ export default class Database extends React.PureComponent {
     })
     document.getElementById("type").selectedIndex=0;
     document.getElementById("ingredient").selectedIndex=0;
+
+    document.getElementById('editButton').style.color = '#ccc';
+    document.getElementById('editButton').style.backgroundColor = '#fff';
+    document.getElementById('editButton').style.border = 'none';
+    document.getElementById('editButton').style.boxShadow = 'none';
+    document.getElementById('editButton').disabled = 'true';
+
+    document.getElementById('addButton').style.color = '';
+    document.getElementById('addButton').style.backgroundColor = '';
+    document.getElementById('addButton').style.border = '';
+    document.getElementById('addButton').style.boxShadow = '';
+    document.getElementById('addButton').disabled = '';
+    document.getElementById('searchButton').style.color = '';
+    document.getElementById('searchButton').style.backgroundColor = '';
+    document.getElementById('searchButton').style.border = '';
+    document.getElementById('searchButton').style.boxShadow = '';
+    document.getElementById('searchButton').disabled = '';
   }
 
 
@@ -234,8 +280,9 @@ export default class Database extends React.PureComponent {
   }
 
   renderHighlight = (special) => {
-    console.log(special);
-    if (special.onMenu === null || special.onMenu === 0)
+    console.log('special: ' + special.onMenu);
+
+    if (!special.onMenu || special.onMenu === null || special.onMenu === 0)
     {
       return(
       <div>
@@ -288,6 +335,7 @@ export default class Database extends React.PureComponent {
   }
 
   countSpecials = () => {
+
     if(this.state.showSpecials === '')
     {
       return (
@@ -329,7 +377,7 @@ export default class Database extends React.PureComponent {
                 <h3>get rid of this</h3>
                 <h2>{this.state.showSpecials.description}</h2>
                 <div>
-                  Type of dish: {this.state.showSpecials.type}<br />Main ingredient: {this.state.showSpecials.ingredient}
+                  Type of dish: {this.state.showSpecials.type}<br/>Main ingredient: {this.state.showSpecials.ingredient}
                 </div>
             </div>
           </div>
@@ -358,12 +406,20 @@ export default class Database extends React.PureComponent {
     .then(function(json) {
       let listItems = this.state.listItems;
       listItems.push(json.special);
+      if(json.error != null) {
+        alert(json.error);
+      }
       this.setState({
         listItems:listItems
       })
       this.forceUpdate();
+      if (!json.error){
+      this.getLastSpecial();
+      }
     }.bind(this));
-    this.getLastSpecial();
+
+
+
     this.setState({
       name: '',
       description: '',
@@ -431,13 +487,13 @@ export default class Database extends React.PureComponent {
         <h1>Database items</h1>
 
         <div className="formDiv" id="formDiv">
-            <h2>Name</h2>
+            <h2><span className="required">* </span>Name</h2>
             <input type="text" className="name" id="name" placeholder="(Name of dish)" value={this.state.name} onChange={this.handleName} />
 
             <div className="dropDowns">
 
             <div className="priceDiv">
-            <h2>Price</h2>
+            <h2><span className="required">* </span>Price</h2>
             <input type="text" className="price" id="price" placeholder="(Price)"  value={this.state.price} onChange={this.handlePrice} />
             </div>
 
@@ -447,7 +503,7 @@ export default class Database extends React.PureComponent {
             </div>
 
               <div>
-              <h2>Type of dish</h2>
+              <h2><span className="required">* </span>Type of dish</h2>
               <select className="type" id="type" onChange={this.handleType} >
                 <option value="0" defaultValue>(Type of dish)</option>
               {this.state.types.map((type,index)=>(
@@ -476,9 +532,9 @@ export default class Database extends React.PureComponent {
 
 
             <div className="buttonsDiv">
-              <input type="submit" className="add" value="Add Item" onClick={this.storeItem} />
-              <input type="submit" className="update" value="Update Item" onClick={() => this.updateItem(this.state.showSpecials)} />
-              <input type="submit" className="search" value="Search" onClick={this.searchSpecials} />
+              <input type="submit" className="add" value="Add Item" id="addButton" onClick={this.storeItem} />
+              <input type="submit" className="update" value="Update Item" id="editButton" onClick={() => this.updateItem(this.state.showSpecials)} />
+              <input type="submit" className="search" value="Search" id="searchButton" onClick={this.searchSpecials} />
             </div>
 
             <div className="buttonsDiv">

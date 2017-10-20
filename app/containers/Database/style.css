@@ -103,6 +103,9 @@ h1 {
 .menus select {
   width: 60%;
 }
+.required {
+  color: #f00;
+}
 .type {
   width: 90%;
 }
@@ -119,7 +122,7 @@ h1 {
   margin-top: 10px;
   align-self: center;
   text-align: center;
-  width: 80%;
+  width: 100%;
 }
 .buttonsDiv input {
   color: #666;

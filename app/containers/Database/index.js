@@ -16,10 +16,12 @@ import FaEdit from 'react-icons/lib/fa/edit';
 export default class Database extends React.PureComponent {
   constructor() {
     super();
-    this.state={
+    this.state = {
       types: [],
       ingredients: [],
       menus: [],
+      seasonalBeers: [],
+      thisSeasonalBeer: '',
       listItems: [],
       lastSpecial:[],
       allSpecials: [],
@@ -45,6 +47,7 @@ export default class Database extends React.PureComponent {
     this.getTypes();
     this.getIngredients();
     this.getMenus();
+    this.getSeasonalBeers();
   }
   componentDidMount(){
     this.disableEditButton();
@@ -100,7 +103,34 @@ export default class Database extends React.PureComponent {
     }.bind(this))
   };
 
+  getSeasonalBeers = () => {
+    fetch('http://localhost:8000/api/getSeasonalBeers', {
+      method: 'get'
+    })
+    .then(function(response){
+      return response.json();
+    })
+    .then(function(json){
+      this.setState({
+        seasonalBeers:json.seasonalBeers
+      })
+    }.bind(this))
+  }
+  
+  updateSeasonalBeers = () => {
+    let data = new FormData();
+    data.append('id', this.state.id);
+    data.append('beerName', this.state.beerName);
 
+    fetch('http://localhost:8000/api/updateSeasonalBeer', {
+      method: 'POST',
+      body:data
+    })
+    .then(function(response){
+      return response.json();
+    })
+    this.getSeasonalBeers();
+  }
   getLastSpecial = () => {
 
     fetch('http://localhost:8000/api/getLastSpecial', {
@@ -258,7 +288,22 @@ export default class Database extends React.PureComponent {
     document.getElementById('searchButton').style.boxShadow = '';
     document.getElementById('searchButton').disabled = '';
   }
+  updateSeasonalBeer = (id) => {
+    let data = new FormData();
+    data.append('id', id);
+    data.append('beerName', this.state.thisSeasonalBeer);
 
+    fetch('http://localhost:8000/api/updateSeasonalBeer', {
+      method: 'POST',
+      body: data
+    })
+    .then(function(response){
+      return response.json();
+    })
+    .then(function(json){
+      alert(json.beerNameUpdated + ' updated!');
+    })
+  }
 
   toggleMenu = (itemID, menuNum) => {
     let data = new FormData();
@@ -449,6 +494,38 @@ export default class Database extends React.PureComponent {
       ingredient:event.target.value
     })
   };
+  handleSeasonalBeer = (index, event) =>{
+    document.getElementById('editButton').style.color = '#ccc';
+    document.getElementById('editButton').style.backgroundColor = '#fff';
+    document.getElementById('editButton').style.border = 'none';
+    document.getElementById('editButton').style.boxShadow = 'none';
+    document.getElementById('editButton').disabled = 'true';
+    document.getElementById('addButton').style.color = '#ccc';
+    document.getElementById('addButton').style.backgroundColor = '#fff';
+    document.getElementById('addButton').style.border = 'none';
+    document.getElementById('addButton').style.boxShadow = 'none';
+    document.getElementById('addButton').disabled = 'true';
+    document.getElementById('searchButton').style.color = '#ccc';
+    document.getElementById('searchButton').style.backgroundColor = '#fff';
+    document.getElementById('searchButton').style.border = 'none';
+    document.getElementById('searchButton').style.boxShadow = 'none';
+    document.getElementById('searchButton').disabled = 'true';
+
+    let seasonalBeers = this.state.seasonalBeers;
+    for(let i = 0; i < seasonalBeers.length; i++)
+    {
+      if(i === index) {
+        seasonalBeers[i].beerName = event.target.value
+      }
+    }
+    this.setState({
+      thisSeasonalBeer:event.target.value,
+      seasonalBeers:seasonalBeers
+    }, function() {
+      this.forceUpdate();
+    })
+  };
+
   handleOnMenu = (event) =>{
     this.setState({
       menu:event.target.value
@@ -530,6 +607,13 @@ export default class Database extends React.PureComponent {
             <h2>Pairings</h2>
             <input type="text" className="pairings" id="pairing" placeholder="(Pairings)" value={this.state.pairings} onChange={this.handlePairings} />
 
+            <div className="beersDiv">
+              {this.state.seasonalBeers.map((beer,index)=>(
+                <div>
+                <h2>{beer.name}</h2><input type="text" value={beer.beerName} onChange={(event) => this.handleSeasonalBeer(index, event)}/><button onClick={() => this.updateSeasonalBeer(beer.id)}>update this beer</button>
+                </div>
+              ))}
+            </div>
 
             <div className="buttonsDiv">
               <input type="submit" className="add" value="Add Item" id="addButton" onClick={this.storeItem} />

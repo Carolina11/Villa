@@ -9,9 +9,11 @@ import Helmet from 'react-helmet';
 
 import './style.css';
 import './styleM.css';
+import '../../globals.js'
 
 import CheckToken from 'components/CheckToken';
 import FaEdit from 'react-icons/lib/fa/edit';
+import * as GLOBAL from '../../globals';
 
 export default class Database extends React.PureComponent {
   constructor() {
@@ -62,7 +64,7 @@ export default class Database extends React.PureComponent {
   }
 
   getTypes = () => {
-    fetch('http://localhost:8000/api/getTypes', {
+    fetch(GLOBAL.BASE_URL + '/api/getTypes', {
       method: 'get'
     })
     .then(function(response){
@@ -76,7 +78,7 @@ export default class Database extends React.PureComponent {
   };
 
   getIngredients = () => {
-    fetch('http://localhost:8000/api/getIngredients', {
+    fetch(GLOBAL.BASE_URL + '/api/getIngredients', {
       method: 'get'
     })
     .then(function(response){
@@ -90,7 +92,7 @@ export default class Database extends React.PureComponent {
   };
 
   getMenus = () => {
-    fetch('http://localhost:8000/api/getMenus', {
+    fetch(GLOBAL.BASE_URL + '/api/getMenus', {
       method: 'get'
     })
     .then(function(response){
@@ -104,7 +106,7 @@ export default class Database extends React.PureComponent {
   };
 
   getSeasonalBeers = () => {
-    fetch('http://localhost:8000/api/getSeasonalBeers', {
+    fetch(GLOBAL.BASE_URL + '/api/getSeasonalBeers', {
       method: 'get'
     })
     .then(function(response){
@@ -116,13 +118,13 @@ export default class Database extends React.PureComponent {
       })
     }.bind(this))
   }
-  
+
   updateSeasonalBeers = () => {
     let data = new FormData();
     data.append('id', this.state.id);
     data.append('beerName', this.state.beerName);
 
-    fetch('http://localhost:8000/api/updateSeasonalBeer', {
+    fetch(GLOBAL.BASE_URL + '/api/updateSeasonalBeer', {
       method: 'POST',
       body:data
     })
@@ -133,7 +135,7 @@ export default class Database extends React.PureComponent {
   }
   getLastSpecial = () => {
 
-    fetch('http://localhost:8000/api/getLastSpecial', {
+    fetch(GLOBAL.BASE_URL + '/api/getLastSpecial', {
       method: 'GET',
     })
     .then(function(response){
@@ -150,7 +152,7 @@ export default class Database extends React.PureComponent {
 
 
   getMenuSpecials = (onMenuID) => {
-    fetch('http://localhost:8000/api/getMenuSpecials?onMenuID=' + onMenuID, {
+    fetch(GLOBAL.BASE_URL + '/api/getMenuSpecials?onMenuID=' + onMenuID, {
       method: 'get'
     })
     .then(function(response){
@@ -170,7 +172,7 @@ export default class Database extends React.PureComponent {
     data.append('ingredient', this.state.ingredient);
     data.append('description', this.state.description);
 
-    fetch('http://localhost:8000/api/searchSpecials', {
+    fetch(GLOBAL.BASE_URL + '/api/searchSpecials', {
       method: 'POST',
       body:data
     })
@@ -249,7 +251,7 @@ export default class Database extends React.PureComponent {
     console.log(special[0].id);
     console.log(this.state.name);
 
-    fetch('http://localhost:8000/api/updateItem', {
+    fetch(GLOBAL.BASE_URL + '/api/updateItem', {
       method: 'POST',
       body: data
     })
@@ -293,7 +295,7 @@ export default class Database extends React.PureComponent {
     data.append('id', id);
     data.append('beerName', this.state.thisSeasonalBeer);
 
-    fetch('http://localhost:8000/api/updateSeasonalBeer', {
+    fetch(GLOBAL.BASE_URL + '/api/updateSeasonalBeer', {
       method: 'POST',
       body: data
     })
@@ -310,7 +312,7 @@ export default class Database extends React.PureComponent {
     data.append('id', itemID);
     data.append('onMenu', menuNum);
 
-    fetch('http://localhost:8000/api/toggleMenu', {
+    fetch(GLOBAL.BASE_URL + '/api/toggleMenu', {
       method: 'POST',
       body: data
     })
@@ -441,7 +443,7 @@ export default class Database extends React.PureComponent {
     data.append('pairings', this.state.pairings);
     data.append('price', this.state.price);
 
-    fetch('http://localhost:8000/api/storeItem', {
+    fetch(GLOBAL.BASE_URL + '/api/storeItem', {
       method: 'POST',
       body:data
     })

@@ -61,7 +61,7 @@ export default class DinnerPrint extends React.PureComponent {
   };
 
   getSoups = () => {
-    fetch('http://localhost:8000/api/getMenuSpecials?onMenuID=' + 2 + '&type=' + 1, {
+    fetch(GLOBAL.BASE_URL + '/api/getMenuSpecials?onMenuID=' + 2 + '&type=' + 1, {
       method: 'get'
     })
     .then(function(response){
@@ -75,7 +75,7 @@ export default class DinnerPrint extends React.PureComponent {
   };
 
   getAppetizers = () => {
-    fetch('http://localhost:8000/api/getMenuSpecials?onMenuID=' + 2 + '&type=' + 2, {
+    fetch(GLOBAL.BASE_URL + '/api/getMenuSpecials?onMenuID=' + 2 + '&type=' + 2, {
       method: 'get'
     })
     .then(function(response){
@@ -96,7 +96,7 @@ export default class DinnerPrint extends React.PureComponent {
   };
 
   getEntrees = () => {
-    fetch('http://localhost:8000/api/getMenuSpecials?onMenuID=' + 2 + '&type=' + 3, {
+    fetch(GLOBAL.BASE_URL + '/api/getMenuSpecials?onMenuID=' + 2 + '&type=' + 3, {
       method: 'get'
     })
     .then(function(response){
@@ -110,7 +110,7 @@ export default class DinnerPrint extends React.PureComponent {
   };
 
   getDesserts = () => {
-    fetch('http://localhost:8000/api/getMenuSpecials?onMenuID=' + 2 + '&type=' + 4, {
+    fetch(GLOBAL.BASE_URL + '/api/getMenuSpecials?onMenuID=' + 2 + '&type=' + 4, {
       method: 'get'
     })
     .then(function(response){
@@ -142,7 +142,7 @@ export default class DinnerPrint extends React.PureComponent {
 
 
   getBeers = () => {
-    fetch('http://localhost:8000/api/getMenuSpecials?onMenuID=' + 2 + '&type=' + 5, {
+    fetch(GLOBAL.BASE_URL + '/api/getMenuSpecials?onMenuID=' + 2 + '&type=' + 5, {
       method: 'get'
     })
     .then(function(response){
@@ -156,7 +156,7 @@ export default class DinnerPrint extends React.PureComponent {
   };
 
   getSeasonalBeers = () => {
-    fetch('http://localhost:8000/api/getSeasonalBeers', {
+    fetch(GLOBAL.BASE_URL + '/api/getSeasonalBeers', {
       method: 'get'
     })
     .then(function(response){
@@ -212,10 +212,6 @@ export default class DinnerPrint extends React.PureComponent {
                 </div>
 
                 {this.showDesserts()}
-                <div className="notes" id="notes">
-                  <h2>* Notes *</h2>
-                </div>
-
 
                 <div className="beers">
                   <h2>* * * Beer News * * *</h2>

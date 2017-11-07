@@ -37,7 +37,7 @@ export default class SignIn extends React.PureComponent {
     data.append('email', this.state.email);
     data.append('password', this.state.password);
 
-    fetch ('http://localhost:8000/api/signIn',{
+    fetch (GLOBAL.BASE_URL + '/api/signIn',{
       method: 'POST',
       body: data
     })
@@ -59,7 +59,7 @@ export default class SignIn extends React.PureComponent {
   }
 
   getUser = (token) => {
-   fetch('http://localhost:8000/api/getUser', {
+   fetch(GLOBAL.BASE_URL + '/api/getUser', {
      method: 'GET',
      headers:{'Authorization':'Bearer ' + token}
    })
@@ -93,7 +93,7 @@ export default class SignIn extends React.PureComponent {
 
         <div className="menuDiv">
           <input type="text" className="email" id="email"  placeholder="(email)" value={this.state.email} onChange={this.handleEmail} onKeyDown="" />
-          <input type="text" className="password" id="password"  placeholder="(password)" value={this.state.password} onChange={this.handlePassword} onKeyDown="" />
+          <input type="password" className="password" id="password"  placeholder="(password)" onChange={this.handlePassword} onKeyDown="" />
           <input type="submit" className="signUPButton" value="Submit" onClick={this.signIn} />
 
         </div>

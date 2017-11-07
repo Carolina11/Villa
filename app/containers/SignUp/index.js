@@ -9,6 +9,7 @@ import Helmet from 'react-helmet';
 
 import './style.css';
 import './styleM.css';
+import * as GLOBAL from '../../globals';
 
 export default class SignUp extends React.PureComponent {
   constructor() {

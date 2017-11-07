@@ -11,6 +11,7 @@ import './style.css';
 import './styleM.css';
 
 import CheckToken from 'components/CheckToken';
+import * as GLOBAL from '../../globals';
 
 export default class DinnerPrint extends React.PureComponent {
 

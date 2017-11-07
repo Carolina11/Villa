@@ -9,6 +9,7 @@ import Helmet from 'react-helmet';
 
 import './style.css';
 import './styleM.css';
+import * as GLOBAL from '../../globals';
 
 export default class LibationsPrint extends React.PureComponent {
   render() {
@@ -19,7 +20,7 @@ export default class LibationsPrint extends React.PureComponent {
         <div className="outLine">
           <h1>Libations</h1>
           <div className="specials">
-            
+
             <div className="entrees">
               <h2>*** Entrees ***</h2>
             </div>

@@ -11,6 +11,7 @@ import './style.css';
 import './styleM.css';
 
 import CheckToken from 'components/CheckToken';
+import * as GLOBAL from '../../globals';
 
 export default class Menu extends React.PureComponent {
 
@@ -18,7 +19,7 @@ export default class Menu extends React.PureComponent {
   render() {
     return (
       <div className="container">
-        
+
         <Helmet title="Menu" meta={[ { name: 'description', content: 'Description of Menu' }]}/>
 
 
